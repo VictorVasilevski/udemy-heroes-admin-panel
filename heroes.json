@@ -1,0 +1,39 @@
+{
+  "heroes": [
+    {
+      "id": 1,
+      "name": "Первый герой",
+      "description": "Первый герой в рейтинге!",
+      "element": "fire"
+    },
+    {
+      "name": "Thor",
+      "element": "water",
+      "description": "sfete64645rt",
+      "id": "e537a92c-cc7e-4003-b2c4-876aed94f0fc"
+    },
+    {
+      "name": "Fswfsdf",
+      "element": "wind",
+      "description": "asdfdfgf6t6fhtf",
+      "id": "1e3e2f98-7ecc-4fe0-a1fd-53a9e603083d"
+    }
+  ],
+  "filters": [
+    {
+      "name": "all"
+    },
+    {
+      "name": "fire"
+    },
+    {
+      "name": "water"
+    },
+    {
+      "name": "wind"
+    },
+    {
+      "name": "earth"
+    }
+  ]
+}
