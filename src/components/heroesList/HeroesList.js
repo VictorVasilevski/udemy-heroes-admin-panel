@@ -1,6 +1,7 @@
 import {useHttp} from '../../hooks/http.hook';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { heroesFetching, heroesFetched, heroesFetchingError, heroRemoved } from '../../actions';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
@@ -12,7 +13,21 @@ import Spinner from '../spinner/Spinner';
 // Удаление идет и с json файла при помощи метода DELETE
 
 const HeroesList = () => {
-    const {heroes, heroesLoadingStatus, appliedFilter} = useSelector(state => state);
+    const filteredHeroesSelector = createSelector(
+        (state) => state.filters.appliedFilter,
+        (state) => state.heroes.heroes,
+        (filter, heroes) => {
+            if (filter === 'all') {
+                console.log('render');
+                return heroes;
+            } else {
+                return heroes.filter(item => item.element === filter);
+            }
+        }
+    );
+
+    const filteredHeroes = useSelector(filteredHeroesSelector);
+    const {heroes, heroesLoadingStatus} = useSelector(state => state.heroes);
     const dispatch = useDispatch();
     const {request} = useHttp();
 
@@ -33,7 +48,7 @@ const HeroesList = () => {
                 dispatch(heroesFetchingError())
                 dispatch(heroesFetched(heroes))
             })
-    })
+    }, [request])
 
     if (heroesLoadingStatus === "loading") {
         return <Spinner/>;
@@ -42,12 +57,12 @@ const HeroesList = () => {
     }
 
     const renderHeroesList = (arr) => {
-        const appliedHeroes = appliedFilter === "all" ? arr : arr.filter(h => h.element === appliedFilter);
-        if (appliedHeroes.length === 0) {
+        // const appliedHeroes = appliedFilter === "all" ? arr : arr.filter(h => h.element === appliedFilter);
+        if (arr.length === 0) {
             return <h5 className="text-center mt-5">Героев пока нет</h5>
         }
 
-        return appliedHeroes.map(({id, ...props}) => {
+        return arr.map(({id, ...props}) => {
             return <HeroesListItem 
                         key={id}
                         onClick={() => removeHero(id)}
@@ -55,7 +70,7 @@ const HeroesList = () => {
         })
     }
 
-    const elements = renderHeroesList(heroes);
+    const elements = renderHeroesList(filteredHeroes);
     return (
         <ul>
             {elements}
