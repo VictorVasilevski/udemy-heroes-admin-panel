@@ -7,12 +7,6 @@
       "element": "fire"
     },
     {
-      "name": "Fswfsdf",
-      "element": "wind",
-      "description": "asdfdfgf6t6fhtf",
-      "id": "1e3e2f98-7ecc-4fe0-a1fd-53a9e603083d"
-    },
-    {
       "name": "Thor",
       "element": "water",
       "description": "gry6757yrfghr",
@@ -23,6 +17,12 @@
       "element": "earth",
       "description": "fdertertgrtgrt",
       "id": "7963da34-381e-4bc5-b8e5-5aa8bba23bdd"
+    },
+    {
+      "name": "Victor",
+      "element": "earth",
+      "description": "456ertegdfgdfgdf",
+      "id": "433e0df2-b5ca-4096-8a8b-95504ffbad8c"
     }
   ],
   "filters": [
