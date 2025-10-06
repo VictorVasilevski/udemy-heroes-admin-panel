@@ -1,9 +1,9 @@
 import {useHttp} from '../../hooks/http.hook';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 
-import { fetchHeroes, heroRemoved, heroesFetched, heroesFetching, heroesFetchingError } from '../../actions';
+import { heroRemoved, fetchHeroes, selectAll } from './heroesSlice';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -15,10 +15,9 @@ import Spinner from '../spinner/Spinner';
 const HeroesList = () => {
     const filteredHeroesSelector = createSelector(
         (state) => state.filters.appliedFilter,
-        (state) => state.heroes.heroes,
+        selectAll,
         (filter, heroes) => {
             if (filter === 'all') {
-                console.log('render');
                 return heroes;
             } else {
                 return heroes.filter(item => item.element === filter);
@@ -32,18 +31,13 @@ const HeroesList = () => {
     const {request} = useHttp();
 
     useEffect(() => {
-        dispatch(fetchHeroes(request));
+        dispatch(fetchHeroes());
         // eslint-disable-next-line
     }, []);
 
     const removeHero = useCallback((id) => {
-        dispatch(heroesFetching());
         request(`http://localhost:3001/heroes/${id}`, 'DELETE')
             .then(() => dispatch(heroRemoved(id)))
-            .catch(() => {
-                dispatch(heroesFetchingError())
-                dispatch(heroesFetched(heroes))
-            })
     }, [request])
 
     if (heroesLoadingStatus === "loading") {
@@ -53,7 +47,6 @@ const HeroesList = () => {
     }
 
     const renderHeroesList = (arr) => {
-        // const appliedHeroes = appliedFilter === "all" ? arr : arr.filter(h => h.element === appliedFilter);
         if (arr.length === 0) {
             return <h5 className="text-center mt-5">Героев пока нет</h5>
         }

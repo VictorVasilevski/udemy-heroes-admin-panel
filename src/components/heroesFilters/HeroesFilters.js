@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
-import {getActiveFilter, getFilterBtnData} from '../../utils/filters.js';
+import {getFilterBtnData} from '../../utils/filters.js';
 import { useEffect, useMemo } from "react";
-import { filtersFetching, filtersFetched, filterApplied, filtersFetchingError } from "../../actions/index.js";
-import {useHttp} from '../../hooks/http.hook.js';
+import { filterApplied, fetchFilters, selectAll } from "./filterSlice.js";
+import store from "../../store/index.js";
 import classNames from "classnames";
 
 // Задача для этого компонента:
@@ -13,16 +13,12 @@ import classNames from "classnames";
 // Представьте, что вы попросили бэкенд-разработчика об этом
 
 const HeroesFilters = () => {
-    const {filters, appliedFilter} = useSelector(state => state.filters);
+    const {appliedFilter} = useSelector(state => state.filters);
+    const filters = selectAll(store.getState());
     const dispatch = useDispatch();
-    const {request} = useHttp();
 
     useEffect(() => {
-        dispatch(filtersFetching());
-        request('http://localhost:3001/filters')
-            .then(data => dispatch(filtersFetched(data)))
-            .then(() => dispatch(filterApplied(appliedFilter)))
-            .catch(() => dispatch(filtersFetchingError()))
+        dispatch(fetchFilters());
     }, []);
 
     const filterItems = useMemo(() => {
